@@ -73,20 +73,12 @@ mf_interactive :
 {
   destinations :
   {
-    log: {
-      @table::mf_coutInfo  # a destination which will react to
+    log:      @local::mf_coutInfo  # a destination which will react to
                                    # messages of ERROR or WARNING or
                                    # INFO severity, but not DEBUG severity                                      # LogPrint).
                                    # (INFO severity is LogInfo or
                                    # LogVerbatim).
-     categories : {
-       INFO : {
-         limit : 1
-         reportEvery : 1
-       }
-     }
-   }
- }
+  }
 }
 
 # debugging -- intended for debugging one or more modules; every message
@@ -108,5 +100,8 @@ mf_debugging :
     statistics :  { stats: @local::mf_debugStats }
   }
 }
+
+mf_interactive.destinations.log.categories.INFO:    { limit : -1 }
+mf_interactive.destinations.log.categories.Summary: { limit : -1 }
 
 END_PROLOG
