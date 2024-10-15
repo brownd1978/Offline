@@ -23,7 +23,7 @@ namespace mu2e {
     public:
     using StrawCollection = std::array<const Straw*, StrawId::_nstraws>;
     using TrackerStrawCollection = std::array<Straw,StrawId::_nustraws>;
-    Panel():_straws(){} // default object non-function but needed for storage classes
+    Panel(){_straws.fill(0);} // default object non-function but needed for storage classes
     Panel( const StrawId& id, TrackerStrawCollection const& straws ); // construct from the Id and the full set of straws
 
     // Accept the compiler generated destructor, copy constructor and assignment operators
