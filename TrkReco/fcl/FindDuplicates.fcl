@@ -1,0 +1,50 @@
+#
+# Find duplicate tracks in a list
+#
+#include "Production/JobConfig/recoMC/prolog.fcl"
+services : @local::Services.Reco
+process_name: FindDuplicates
+source : { module_type : RootInput }
+
+physics.filters : {
+  DownDuplicates : {
+    @table::TrkReco.filters.SelectSameTrack
+    PrimaryKalSeedCollection : "KKDe"
+    SecondaryKalSeedCollection : "KKDe"
+    ComparisonDirection : "Downstream"
+    debugLevel : 1
+  }
+  UpDuplicates : {
+    @table::TrkReco.filters.SelectSameTrack
+    PrimaryKalSeedCollection : "KKUe"
+    SecondaryKalSeedCollection : "KKUe"
+    ComparisonDirection : "Upstream"
+    debugLevel : 1
+  }
+}
+physics.analyzers : {
+    printDownDuplicates : {
+      module_type : PrintModule
+      kalSeedPrinter : {
+        verbose : 1
+        PtrCollection : true
+        inputTags : ["DownDuplicates" ]
+      }
+      SelectEvents : [ DownPath ]
+    }
+    printUpDuplicates : {
+      module_type : PrintModule
+      kalSeedPrinter : {
+        verbose : 1
+        PtrCollection : true
+        inputTags : ["UpDuplicates" ]
+      }
+      SelectEvents : [ UpPath ]
+    }
+
+}
+physics.DownPath : [ DownDuplicates ]
+physics.UpPath : [ UpDuplicates ]
+physics.trigger_paths : [ DownPath, UpPath ]
+physics.EndPath : [ printUpDuplicates, printDownDuplicates ]
+physics.end_paths : [ EndPath ]
